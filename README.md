@@ -7,7 +7,7 @@
 ![Lint](https://img.shields.io/github/workflow/status/watcol/somen-decode/Lint?label=lint&style=flat-square)
 ![Test](https://img.shields.io/github/workflow/status/watcol/somen-decode/Test?label=test&style=flat-square)
 
-A byte string decoder for [Somen](https://github.com/watcol/somen).
+A byte string decoder for [somen](https://github.com/watcol/somen).
 
 ## Usage
 Add to your `Cargo.toml`:
