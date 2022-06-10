@@ -1,4 +1,5 @@
 //! 7-bit ASCII decoder
+use alloc::string::String;
 use somen::prelude::*;
 
 /// An ASCII encoded character.

@@ -20,10 +20,9 @@ include = [
 all-features = true
 
 [features]
-default = ['std']
-nightly = []
-std = ['alloc', 'somen/std']
+default = ['alloc']
 alloc = ['somen/alloc']
+nightly = []
 
 [dependencies]
 somen = { version = "0.3.0-beta", default_features = false }
