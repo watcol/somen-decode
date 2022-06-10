@@ -16,8 +16,12 @@ include = [
   "src/**/*.rs"
 ]
 
+[package.metadata.docs.rs]
+all-features = true
+
 [features]
 default = ['std']
+nightly = []
 std = ['alloc', 'somen/std']
 alloc = ['somen/alloc']
 
