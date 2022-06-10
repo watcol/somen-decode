@@ -7,3 +7,4 @@
 extern crate alloc;
 
 pub mod ascii;
+pub mod utf32;
