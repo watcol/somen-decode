@@ -25,7 +25,8 @@ alloc = ['somen/alloc']
 nightly = []
 
 [dependencies]
-somen = { version = "0.3.0-beta", default_features = false }
+# somen = { version = "0.3.0-beta", default_features = false }
+somen = { path = "../somen", default_features = false }
 
 [dev-dependencies]
 futures = { version = "0.3", default-features = false, features = ["executor"] }
