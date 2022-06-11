@@ -16,14 +16,6 @@ Add to your `Cargo.toml`:
 somen-decode = "0.1.0"
 ```
 
-If you are in the `no_std` environment:
-```toml
-[dependencies.somen-decode]
-version = "0.1.0"
-default-features = false
-features = ["alloc"]   # If you have an allocator implementation
-```
-
 ## Documentation
 API Documentations are available on [here](https://docs.rs/somen-decode).
 
