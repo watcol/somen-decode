@@ -10,7 +10,7 @@ fn decode(c: u32) -> Option<char> {
 ///
 /// # Examples
 /// ```
-/// # futures::executor::block_on(async {
+/// # futures_executor::block_on(async {
 /// # use somen_decode::utf32;
 /// use somen::prelude::*;
 ///
@@ -35,7 +35,7 @@ where
 ///
 /// # Examples
 /// ```
-/// # futures::executor::block_on(async {
+/// # futures_executor::block_on(async {
 /// # use somen_decode::utf32_be;
 /// use somen::prelude::*;
 ///
@@ -66,7 +66,7 @@ where
 ///
 /// # Examples
 /// ```
-/// # futures::executor::block_on(async {
+/// # futures_executor::block_on(async {
 /// # use somen_decode::utf32_le;
 /// use somen::prelude::*;
 ///

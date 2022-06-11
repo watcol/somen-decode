@@ -20,4 +20,4 @@ include = [
 somen = { version = "0.3.0-beta", default_features = false }
 
 [dev-dependencies]
-futures = { version = "0.3", default-features = false, features = ["executor"] }
+futures-executor = "0.3"

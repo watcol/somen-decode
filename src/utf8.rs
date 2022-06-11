@@ -4,7 +4,7 @@ use somen::prelude::*;
 ///
 /// # Examples
 /// ```
-/// # futures::executor::block_on(async {
+/// # futures_executor::block_on(async {
 /// # use somen_decode::utf8;
 /// use somen::prelude::*;
 ///

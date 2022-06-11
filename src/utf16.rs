@@ -25,7 +25,7 @@ fn decode_two(b1: u16, b2: u16) -> Option<char> {
 ///
 /// # Examples
 /// ```
-/// # futures::executor::block_on(async {
+/// # futures_executor::block_on(async {
 /// # use somen_decode::utf16;
 /// use somen::prelude::*;
 ///
@@ -59,7 +59,7 @@ where
 ///
 /// # Examples
 /// ```
-/// # futures::executor::block_on(async {
+/// # futures_executor::block_on(async {
 /// # use somen_decode::utf16_be;
 /// use somen::prelude::*;
 ///
@@ -98,7 +98,7 @@ where
 ///
 /// # Examples
 /// ```
-/// # futures::executor::block_on(async {
+/// # futures_executor::block_on(async {
 /// # use somen_decode::utf16_le;
 /// use somen::prelude::*;
 ///
