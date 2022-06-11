@@ -61,10 +61,10 @@ where
 /// # Examples
 /// ```
 /// # futures::executor::block_on(async {
-/// # use somen_decode::utf16be;
+/// # use somen_decode::utf16_be;
 /// use somen::prelude::*;
 ///
-/// let mut parser = utf16be();
+/// let mut parser = utf16_be();
 /// let mut stream = stream::from_slice(
 ///     b"\xD8\x34\xDD\x1E\x00\x4d\x00\x75\x00\x73\x00\x69\x00\x63\xD8\x34",
 /// );
@@ -78,7 +78,7 @@ where
 /// assert!(parser.parse(&mut stream).await.is_err());
 /// # });
 /// ```
-pub fn utf16be<'a, I>() -> impl Parser<I, Output = char>
+pub fn utf16_be<'a, I>() -> impl Parser<I, Output = char>
 where
     I: Positioned<Ok = u8> + ?Sized + 'a,
 {
@@ -104,10 +104,10 @@ where
 /// # Examples
 /// ```
 /// # futures::executor::block_on(async {
-/// # use somen_decode::utf16le;
+/// # use somen_decode::utf16_le;
 /// use somen::prelude::*;
 ///
-/// let mut parser = utf16le();
+/// let mut parser = utf16_le();
 /// let mut stream = stream::from_slice(
 ///     b"\x34\xD8\x1E\xDD\x4d\x00\x75\x00\x73\x00\x69\x00\x63\x00\x34\xD8",
 /// );
@@ -121,7 +121,7 @@ where
 /// assert!(parser.parse(&mut stream).await.is_err());
 /// # });
 /// ```
-pub fn utf16le<'a, I>() -> impl Parser<I, Output = char>
+pub fn utf16_le<'a, I>() -> impl Parser<I, Output = char>
 where
     I: Positioned<Ok = u8> + ?Sized + 'a,
 {

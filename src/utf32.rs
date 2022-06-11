@@ -2,7 +2,7 @@ use somen::prelude::*;
 
 // A base decoder
 #[inline]
-fn decode_utf32(c: u32) -> Option<char> {
+fn decode(c: u32) -> Option<char> {
     char::from_u32(c)
 }
 
@@ -28,7 +28,7 @@ pub fn utf32<'a, I>() -> impl Parser<I, Output = char>
 where
     I: Positioned<Ok = u32> + ?Sized + 'a,
 {
-    is_some(decode_utf32).expect("UTF-32 character")
+    is_some(decode).expect("UTF-32 character")
 }
 
 /// A UTF-32 encoded [`u8`] decoder. (big-endian)
@@ -36,10 +36,10 @@ where
 /// # Examples
 /// ```
 /// # futures::executor::block_on(async {
-/// # use somen_decode::utf32be;
+/// # use somen_decode::utf32_be;
 /// use somen::prelude::*;
 ///
-/// let mut parser = utf32be();
+/// let mut parser = utf32_be();
 /// let mut stream = stream::from_slice(
 ///     b"\x00\x00\x00\x41\x00\x00\x00\xC5\x00\x00\x30\x42\x00\x01\xF4\xAF\x00\x11\x00\x00",
 /// );
@@ -51,14 +51,14 @@ where
 /// assert!(parser.parse(&mut stream).await.is_err());
 /// # });
 /// ```
-pub fn utf32be<'a, I>() -> impl Parser<I, Output = char>
+pub fn utf32_be<'a, I>() -> impl Parser<I, Output = char>
 where
     I: Positioned<Ok = u8> + ?Sized + 'a,
 {
     any()
         .times(4)
         .fill::<4>(0)
-        .try_map(|b| decode_utf32(u32::from_be_bytes(b.unwrap())).ok_or("UTF-32BE character"))
+        .try_map(|b| decode(u32::from_be_bytes(b.unwrap())).ok_or("UTF-32BE character"))
         .rewindable()
 }
 
@@ -67,10 +67,10 @@ where
 /// # Examples
 /// ```
 /// # futures::executor::block_on(async {
-/// # use somen_decode::utf32le;
+/// # use somen_decode::utf32_le;
 /// use somen::prelude::*;
 ///
-/// let mut parser = utf32le();
+/// let mut parser = utf32_le();
 /// let mut stream = stream::from_slice(
 ///     b"\x41\x00\x00\x00\xC5\x00\x00\x00\x42\x30\x00\x00\xAF\xF4\x01\x00\x00\x00\x11\x00"
 /// );
@@ -82,13 +82,13 @@ where
 /// assert!(parser.parse(&mut stream).await.is_err());
 /// # });
 /// ```
-pub fn utf32le<'a, I>() -> impl Parser<I, Output = char>
+pub fn utf32_le<'a, I>() -> impl Parser<I, Output = char>
 where
     I: Positioned<Ok = u8> + ?Sized + 'a,
 {
     any()
         .times(4)
         .fill::<4>(0)
-        .try_map(|b| decode_utf32(u32::from_le_bytes(b.unwrap())).ok_or("UTF-32LE character"))
+        .try_map(|b| decode(u32::from_le_bytes(b.unwrap())).ok_or("UTF-32LE character"))
         .rewindable()
 }
