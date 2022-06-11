@@ -81,14 +81,18 @@ pub fn utf16_be<'a, I>() -> impl Parser<I, Output = char>
 where
     I: Positioned<Ok = u8> + ?Sized + 'a,
 {
-    (any(), any())
-        .try_map(|(b1, b2)| decode_one(u16::from_be_bytes([b1, b2])).ok_or("UTF-16BE character"))
+    any()
+        .times(2)
+        .fill(0)
+        .try_map(|b| decode_one(u16::from_be_bytes(b.unwrap())).ok_or("UTF-16BE character"))
         .rewindable()
         .then(|res| match res {
             Ok(c) => value(c).left(),
-            Err(b1) => (any(), any())
-                .try_map(move |(b21, b22)| {
-                    decode_two(b1, u16::from_be_bytes([b21, b22])).ok_or("UTF-16BE character")
+            Err(b1) => any()
+                .times(2)
+                .fill(0)
+                .try_map(move |b2| {
+                    decode_two(b1, u16::from_be_bytes(b2.unwrap())).ok_or("UTF-16BE character")
                 })
                 .right(),
         })
@@ -120,14 +124,18 @@ pub fn utf16_le<'a, I>() -> impl Parser<I, Output = char>
 where
     I: Positioned<Ok = u8> + ?Sized + 'a,
 {
-    (any(), any())
-        .try_map(|(b1, b2)| decode_one(u16::from_le_bytes([b1, b2])).ok_or("UTF-16BE character"))
+    any()
+        .times(2)
+        .fill(0)
+        .try_map(|b| decode_one(u16::from_le_bytes(b.unwrap())).ok_or("UTF-16LE character"))
         .rewindable()
         .then(|res| match res {
             Ok(c) => value(c).left(),
-            Err(b1) => (any(), any())
-                .try_map(move |(b21, b22)| {
-                    decode_two(b1, u16::from_le_bytes([b21, b22])).ok_or("UTF-16BE character")
+            Err(b1) => any()
+                .times(2)
+                .fill(0)
+                .try_map(move |b2| {
+                    decode_two(b1, u16::from_le_bytes(b2.unwrap())).ok_or("UTF-16LE character")
                 })
                 .right(),
         })

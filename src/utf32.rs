@@ -55,10 +55,10 @@ pub fn utf32_be<'a, I>() -> impl Parser<I, Output = char>
 where
     I: Positioned<Ok = u8> + ?Sized + 'a,
 {
-    (any(), any(), any(), any())
-        .try_map(|(b1, b2, b3, b4)| {
-            decode(u32::from_be_bytes([b1, b2, b3, b4])).ok_or("UTF-32LE character")
-        })
+    any()
+        .times(4)
+        .fill(0)
+        .try_map(|b| decode(u32::from_be_bytes(b.unwrap())).ok_or("UTF-32BE character"))
         .rewindable()
 }
 
@@ -86,9 +86,9 @@ pub fn utf32_le<'a, I>() -> impl Parser<I, Output = char>
 where
     I: Positioned<Ok = u8> + ?Sized + 'a,
 {
-    (any(), any(), any(), any())
-        .try_map(|(b1, b2, b3, b4)| {
-            decode(u32::from_le_bytes([b1, b2, b3, b4])).ok_or("UTF-32LE character")
-        })
+    any()
+        .times(4)
+        .fill(0)
+        .try_map(|b| decode(u32::from_le_bytes(b.unwrap())).ok_or("UTF-32LE character"))
         .rewindable()
 }

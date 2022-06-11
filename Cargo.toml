@@ -17,7 +17,7 @@ include = [
 ]
 
 [dependencies]
-somen = { version = "0.3.0-beta", default_features = false }
+somen = { version = "0.3.0", default_features = false }
 
 [dev-dependencies]
 futures-executor = "0.3"
