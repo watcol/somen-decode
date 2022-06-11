@@ -16,14 +16,6 @@ include = [
   "src/**/*.rs"
 ]
 
-[package.metadata.docs.rs]
-all-features = true
-
-[features]
-default = ['alloc']
-alloc = ['somen/alloc']
-nightly = []
-
 [dependencies]
 # somen = { version = "0.3.0-beta", default_features = false }
 somen = { git = "https://github.com/watcol/somen.git", default_features = false }

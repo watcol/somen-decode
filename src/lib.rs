@@ -1,10 +1,9 @@
 //! A byte string decoder for somen.
 #![no_std]
 #![doc(test(attr(warn(warnings))))]
-#![cfg_attr(feature = "nightly", feature(doc_cfg))]
 
-#[cfg(feature = "alloc")]
-extern crate alloc;
+mod ascii;
+mod utf32;
 
-pub mod ascii;
-pub mod utf32;
+pub use ascii::ascii;
+pub use utf32::{utf32, utf32be, utf32le};

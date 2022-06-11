@@ -1,5 +1,3 @@
-//! UTF-32 decoder
-use alloc::string::String;
 use somen::prelude::*;
 
 // A base decoder
@@ -8,15 +6,15 @@ fn decode_utf32(c: u32) -> Option<char> {
     char::from_u32(c)
 }
 
-/// A 32-bit encoded UTF-32 character.
+/// A UTF-32 encoded [`u32`] decoder.
 ///
 /// # Examples
 /// ```
 /// # futures::executor::block_on(async {
-/// # use somen_decode::utf32::utf32_char;
+/// # use somen_decode::utf32;
 /// use somen::prelude::*;
 ///
-/// let mut parser = utf32_char();
+/// let mut parser = utf32();
 /// let mut stream = stream::from_slice(&[0x41, 0xC5, 0x3042, 0x1F4AF, 0x110000]);
 ///
 /// assert_eq!(parser.parse(&mut stream).await, Ok('A'));
@@ -26,48 +24,22 @@ fn decode_utf32(c: u32) -> Option<char> {
 /// assert!(parser.parse(&mut stream).await.is_err());
 /// # });
 /// ```
-pub fn utf32_char<'a, I>() -> impl Parser<I, Output = char>
+pub fn utf32<'a, I>() -> impl Parser<I, Output = char>
 where
     I: Positioned<Ok = u32> + ?Sized + 'a,
 {
     is_some(decode_utf32).expect("UTF-32 character")
 }
 
-/// A 32-bit encoded UTF-32 string.
+/// A UTF-32 encoded [`u8`] decoder. (big-endian)
 ///
 /// # Examples
 /// ```
 /// # futures::executor::block_on(async {
-/// # use somen_decode::utf32::utf32_string;
+/// # use somen_decode::utf32be;
 /// use somen::prelude::*;
 ///
-/// let mut parser = utf32_string();
-/// let mut stream = stream::from_slice(&[0x41, 0xC5, 0x3042, 0x1F4AF, 0x110000]);
-///
-/// assert_eq!(parser.parse(&mut stream).await, Ok(String::from("AÅあ💯")));
-///
-/// // Invalid inputs are remained.
-/// assert_eq!(any().parse(&mut stream).await, Ok(0x110000));
-/// # });
-/// ```
-#[cfg(feature = "alloc")]
-#[cfg_attr(feature = "nightly", doc(cfg(feature = "alloc")))]
-pub fn utf32_string<'a, I>() -> impl Parser<I, Output = String>
-where
-    I: Input<Ok = u32> + ?Sized + 'a,
-{
-    utf32_char().repeat(..).collect().expect("UTF-32 string")
-}
-
-/// A byte encoded UTF-32 character (big-endian).
-///
-/// # Examples
-/// ```
-/// # futures::executor::block_on(async {
-/// # use somen_decode::utf32::utf32be_char;
-/// use somen::prelude::*;
-///
-/// let mut parser = utf32be_char();
+/// let mut parser = utf32be();
 /// let mut stream = stream::from_slice(
 ///     b"\x00\x00\x00\x41\x00\x00\x00\xC5\x00\x00\x30\x42\x00\x01\xF4\xAF\x00\x11\x00\x00",
 /// );
@@ -79,7 +51,7 @@ where
 /// assert!(parser.parse(&mut stream).await.is_err());
 /// # });
 /// ```
-pub fn utf32be_char<'a, I>() -> impl Parser<I, Output = char>
+pub fn utf32be<'a, I>() -> impl Parser<I, Output = char>
 where
     I: Positioned<Ok = u8> + ?Sized + 'a,
 {
@@ -90,49 +62,15 @@ where
         .rewindable()
 }
 
-/// A byte encoded UTF-32 string (big-endian).
+/// A UTF-32 encoded [`u8`] decoder. (little-endian)
 ///
 /// # Examples
 /// ```
 /// # futures::executor::block_on(async {
-/// # use somen_decode::utf32::utf32be_string;
+/// # use somen_decode::utf32le;
 /// use somen::prelude::*;
 ///
-/// let mut parser = utf32be_string();
-/// let mut stream = stream::from_slice(
-///     b"\x00\x00\x00\x41\x00\x00\x00\xC5\x00\x00\x30\x42\x00\x01\xF4\xAF\x00\x11\x00\x00"
-/// );
-///
-/// assert_eq!(parser.parse(&mut stream).await, Ok(String::from("AÅあ💯")));
-///
-/// // Invalid inputs are remained.
-/// assert_eq!(
-///     any().times(4).fill::<4>(0).parse(&mut stream).await,
-///     Ok(Some([0x00, 0x11, 0x00, 0x00])),
-/// );
-/// # });
-/// ```
-#[cfg(feature = "alloc")]
-#[cfg_attr(feature = "nightly", doc(cfg(feature = "alloc")))]
-pub fn utf32be_string<'a, I>() -> impl Parser<I, Output = String>
-where
-    I: Input<Ok = u8> + ?Sized + 'a,
-{
-    utf32be_char()
-        .repeat(..)
-        .collect()
-        .expect("UTF-32BE string")
-}
-
-/// A byte encoded UTF-32 character (little-endian).
-///
-/// # Examples
-/// ```
-/// # futures::executor::block_on(async {
-/// # use somen_decode::utf32::utf32le_char;
-/// use somen::prelude::*;
-///
-/// let mut parser = utf32le_char();
+/// let mut parser = utf32le();
 /// let mut stream = stream::from_slice(
 ///     b"\x41\x00\x00\x00\xC5\x00\x00\x00\x42\x30\x00\x00\xAF\xF4\x01\x00\x00\x00\x11\x00"
 /// );
@@ -144,7 +82,7 @@ where
 /// assert!(parser.parse(&mut stream).await.is_err());
 /// # });
 /// ```
-pub fn utf32le_char<'a, I>() -> impl Parser<I, Output = char>
+pub fn utf32le<'a, I>() -> impl Parser<I, Output = char>
 where
     I: Positioned<Ok = u8> + ?Sized + 'a,
 {
@@ -153,38 +91,4 @@ where
         .fill::<4>(0)
         .try_map(|b| decode_utf32(u32::from_le_bytes(b.unwrap())).ok_or("UTF-32LE character"))
         .rewindable()
-}
-
-/// A byte encoded UTF-32 string (little-endian).
-///
-/// # Examples
-/// ```
-/// # futures::executor::block_on(async {
-/// # use somen_decode::utf32::utf32le_string;
-/// use somen::prelude::*;
-///
-/// let mut parser = utf32le_string();
-/// let mut stream = stream::from_slice(
-///     b"\x41\x00\x00\x00\xC5\x00\x00\x00\x42\x30\x00\x00\xAF\xF4\x01\x00\x00\x00\x11\x00",
-/// );
-///
-/// assert_eq!(parser.parse(&mut stream).await, Ok(String::from("AÅあ💯")));
-///
-/// // Invalid inputs are remained.
-/// assert_eq!(
-///     any().times(4).fill::<4>(0).parse(&mut stream).await,
-///     Ok(Some([0x00, 0x00, 0x11, 0x00])),
-/// );
-/// # });
-/// ```
-#[cfg(feature = "alloc")]
-#[cfg_attr(feature = "nightly", doc(cfg(feature = "alloc")))]
-pub fn utf32le_string<'a, I>() -> impl Parser<I, Output = String>
-where
-    I: Input<Ok = u8> + ?Sized + 'a,
-{
-    utf32le_char()
-        .repeat(..)
-        .collect()
-        .expect("UTF-32BE string")
 }
