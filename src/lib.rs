@@ -1,4 +1,4 @@
-//! A byte string decoder for somen.
+//! A byte string decoder for [somen](https://docs.rs/somen).
 #![no_std]
 #![doc(test(attr(warn(warnings))))]
 
