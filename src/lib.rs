@@ -5,7 +5,9 @@
 mod ascii;
 mod utf16;
 mod utf32;
+mod utf8;
 
 pub use ascii::ascii;
 pub use utf16::{utf16, utf16_be, utf16_le};
 pub use utf32::{utf32, utf32_be, utf32_le};
+pub use utf8::utf8;
