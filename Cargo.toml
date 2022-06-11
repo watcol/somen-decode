@@ -17,8 +17,7 @@ include = [
 ]
 
 [dependencies]
-# somen = { version = "0.3.0-beta", default_features = false }
-somen = { git = "https://github.com/watcol/somen.git", default_features = false }
+somen = { version = "0.3.0-beta", default_features = false }
 
 [dev-dependencies]
 futures = { version = "0.3", default-features = false, features = ["executor"] }
