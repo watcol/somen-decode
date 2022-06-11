@@ -1,7 +1,6 @@
 use somen::prelude::*;
 
 // A base decoder
-#[inline]
 fn decode_one(b: u16) -> Option<Result<char, u16>> {
     if b & 0xFC00 == 0xDC00 {
         None
